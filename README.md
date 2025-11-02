@@ -81,3 +81,4 @@ PHOTOSHOOT/
 - pandas 2.1.4
 - openpyxl 3.1.2
 - Werkzeug 3.0.1
+# Conquer-Design-Group
