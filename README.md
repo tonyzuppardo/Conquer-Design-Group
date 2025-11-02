@@ -81,4 +81,31 @@ PHOTOSHOOT/
 - pandas 2.1.4
 - openpyxl 3.1.2
 - Werkzeug 3.0.1
+
+## AI-Assisted Development Workflow
+
+This project includes an AI-powered development workflow system to help structure and implement new features systematically. See [AI-DEV-TASKS.md](AI-DEV-TASKS.md) for complete documentation.
+
+### Quick Start for Adding Features
+
+1. **Create a PRD (Product Requirements Document)**
+   ```
+   Use @create-prd.md
+   Here's the feature I want to build: [Describe your feature]
+   ```
+
+2. **Generate Task List from PRD**
+   ```
+   Now take @[your-prd-file].md and create tasks using @generate-tasks.md
+   ```
+
+3. **Execute Tasks Step-by-Step**
+   ```
+   Please start on task 1.1 from the generated task list.
+   ```
+
+All PRDs and task lists will be saved in the `/tasks` directory.
+
+---
+
 # Conquer-Design-Group
