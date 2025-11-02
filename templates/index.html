@@ -185,6 +185,8 @@
             box-shadow: 0 10px 30px rgba(191, 255, 0, 0.3);
             text-transform: uppercase;
             width: 100%;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover:not(:disabled) {
@@ -287,6 +289,25 @@
             color: #B0B0B0;
             font-size: 14px;
             font-weight: 600;
+        }
+
+        /* Sparkle particle animation */
+        .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes sparkle-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.5);
+            }
         }
 
         @media (max-width: 768px) {
@@ -414,6 +435,64 @@
                 submitBtn.disabled = false;
             }
         });
+
+        // Sparkle effect function
+        function createSparkles(event) {
+            // Don't create sparkles if button is disabled
+            if (event.target.disabled) return;
+
+            const button = event.target;
+            const rect = button.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            // Create 12-15 particles
+            const particleCount = Math.floor(Math.random() * 4) + 12;
+
+            for (let i = 0; i < particleCount; i++) {
+                createSparkle(x, y, button);
+            }
+        }
+
+        function createSparkle(x, y, container) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+
+            // Random size between 2-4px
+            const size = Math.random() * 2 + 2;
+            sparkle.style.width = size + 'px';
+            sparkle.style.height = size + 'px';
+
+            // 60% lime green, 40% white
+            const color = Math.random() > 0.4 ? '#BFFF00' : '#FFFFFF';
+            sparkle.style.backgroundColor = color;
+
+            // Position at click point
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+
+            // Random direction (360 degrees)
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 50 + 50; // 50-100px
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+
+            sparkle.style.setProperty('--tx', tx + 'px');
+            sparkle.style.setProperty('--ty', ty + 'px');
+
+            // Add animation
+            sparkle.style.animation = 'sparkle-burst 0.6s ease-out forwards';
+
+            container.appendChild(sparkle);
+
+            // Remove after animation
+            setTimeout(() => {
+                sparkle.remove();
+            }, 600);
+        }
+
+        // Add sparkle effect to submit button
+        submitBtn.addEventListener('click', createSparkles);
 
         // Form submit handler
         uploadForm.addEventListener('submit', function(e) {
