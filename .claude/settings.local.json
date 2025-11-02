@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 install:*)",
+      "Bash(python3:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Photoshoot Folder Organizer app\n\n- Flask web app with modern UI design\n- Accepts Excel/CSV files with Days, Groups, and Student names\n- Automatically creates organized folder structure\n- Generates ZIP download with complete folder hierarchy\n- Includes Group and Group Final folders for each group\n- Modern dark theme with lime green accents\n- Mobile-first responsive design\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

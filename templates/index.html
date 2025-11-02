@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photoshoot Folder Organizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            background: #1A1A1A;
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .camera-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .camera-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #FFFFFF;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #FFFFFF;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #B0B0B0;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: #2A2A2A;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #BFFF00;
+            font-weight: 700;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #B0B0B0;
+        }
+
+        .instructions li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #BFFF00;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .upload-section {
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 3px dashed #BFFF00;
+            border-radius: 20px;
+            padding: 50px 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background: rgba(191, 255, 0, 0.03);
+            display: block;
+        }
+
+        .upload-area:hover {
+            background: rgba(191, 255, 0, 0.08);
+            transform: scale(1.02);
+        }
+
+        .upload-area.dragover {
+            background: rgba(191, 255, 0, 0.12);
+            transform: scale(1.05);
+            border-color: #BFFF00;
+            box-shadow: 0 0 30px rgba(191, 255, 0, 0.2);
+        }
+
+        .file-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #B0B0B0;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-name {
+            margin: 20px 0 0 0;
+            padding: 15px 20px;
+            background: rgba(191, 255, 0, 0.15);
+            border-radius: 10px;
+            color: #BFFF00;
+            font-weight: 600;
+            display: none;
+            font-size: 14px;
+        }
+
+        .file-name.show {
+            display: block;
+        }
+
+        .btn {
+            background: #BFFF00;
+            color: #000000;
+            padding: 15px 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0 0 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(191, 255, 0, 0.3);
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(191, 255, 0, 0.4);
+            background: #D4FF33;
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background: #3A3A3A;
+            color: #666666;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert:before {
+            font-size: 20px;
+        }
+
+        .alert-error {
+            background: #FF5252;
+            color: #FFFFFF;
+        }
+
+        .alert-error:before {
+            content: "✕";
+        }
+
+        .alert-success {
+            background: #4CAF50;
+            color: #FFFFFF;
+        }
+
+        .alert-success:before {
+            content: "✓";
+        }
+
+        .example {
+            background: #1A1A1A;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #B0B0B0;
+            border: 1px solid #3A3A3A;
+        }
+
+        .example-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #2A2A2A;
+            border-top: 4px solid #BFFF00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #B0B0B0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            .upload-area {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="camera-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </div>
+            <h1>Photoshoot Organizer</h1>
+            <p class="subtitle">PROFESSIONAL FOLDER STRUCTURE</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card instructions">
+            <h2>How It Works</h2>
+            <ul>
+                <li>Upload an Excel (.xlsx, .xls) or CSV file</li>
+                <li>File must contain columns: <strong>Days</strong>, <strong>Groups</strong>, and <strong>Student names</strong></li>
+                <li>System will create organized folder structure</li>
+                <li>Includes "Group" and "Group Final" folders automatically</li>
+                <li>Download your organized folders as a ZIP file</li>
+            </ul>
+
+            <div class="example">
+                <div class="example-title">Example Spreadsheet Format:</div>
+                Days | Groups | Student names<br>
+                Day 1 | party | Tony Z<br>
+                Day 1 | party | Alyssa H<br>
+                Day 1 | snow | John D<br>
+                Day 2 | sunset | Jane S
+            </div>
+        </div>
+
+        <div class="card">
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="upload-section">
+                    <label for="fileInput" class="upload-area" id="uploadArea">
+                        <div class="file-icon">📁</div>
+                        <div class="upload-text">Click to browse or drag & drop</div>
+                        <div class="upload-subtext">Accepts Excel and CSV files (max 16MB)</div>
+                        <input type="file" id="fileInput" name="file" accept=".xlsx,.xls,.csv" required>
+                    </label>
+                    <div class="file-name" id="fileName"></div>
+                    <button type="submit" class="btn" id="submitBtn" disabled>Generate Folder Structure</button>
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <div class="loading-text">Creating your folder structure...</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadForm = document.getElementById('uploadForm');
+        const loading = document.getElementById('loading');
+
+        // File input change handler
+        fileInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                fileName.textContent = '📄 ' + this.files[0].name;
+                fileName.classList.add('show');
+                submitBtn.disabled = false;
+            } else {
+                fileName.classList.remove('show');
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileName.textContent = '📄 ' + files[0].name;
+                fileName.classList.add('show');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Form submit handler
+        uploadForm.addEventListener('submit', function(e) {
+            submitBtn.disabled = true;
+            loading.classList.add('show');
+        });
+    </script>
+</body>
+</html>
